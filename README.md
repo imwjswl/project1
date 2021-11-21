@@ -255,25 +255,172 @@ getopt와 getopts를 사용하기 위해서는 먼저 short 옵션과 long 옵�
    sed '/^$/d 1.html    # 공백라인을 삭제하는 명령이다
    ```
 
+*****
 
 * **awk**
 
-  awk는 **데이터를 조작하고 리포트를 생성하기 위해 사용하는 언어**이다.
-  간단한 연사자를 명령라인에서 사용할 수 있으며, 큰 프로그램을 위해 사용될 수 있다.
-  awk는 데이터를 조작할 수 있기 때문에 쉘 스크립트에서 사용되는 필수 툴이며, 작은 데이터베이스를 관리하기 위해서도 필수이다.
+  awk는 유닉스에서 개발된 **스크립트 언어**로 텍스트가 저장되어 있는 파일을 **원하는 대로 필터링하거나 추가해주거나 기타 가공을 통해서 나온 결과를 행과 열로 출력**해주는 프로그램이다. 
   awk는 Alfred Aho, Peter Weinberger, Brian Kernighan 3명이 만들어 각 이름의 이니셜의 가져와서 awk라고 불린다.
   
-* **awk 형식**
+  * **기본 용어**
+![image](https://user-images.githubusercontent.com/94671864/142760767-325d378b-05f4-4996-8143-1bc8323f321e.png)
+
+    위 그림은 하나의 텍스트 파일에 기록된 내용을 보여준다.
+    여기서 각 단어들은 공백으로 구분되어 진다. 각 줄(line)은 **레코드(record)** 라고 부른다.
+   그리고 그 안의 각각의 단어들이 **필드(field)** 라고 불린다.
+
+   awk에서 `$0`은 **레코드**, `$1, ..., $N`은 **필드를 나타내는 열**을 말한다.
+   
+   * **awk 기본 명령어**
+
+     ```bash
+     awk [OPTION] [awk program] [ARGUMENT]
+     ```
+     
+     **OPTION**
+    
+     `-F` : 필드 구분 문자 지정
+     
+     `-f` : awk program 파일 경로 지정
+     
+     `-v` : awk program에서 사용될 특정 variable값 지정
+     
+     **awk program**
+     ```
+     -f 옵션이 사용되지 않은 경우, awk가 실행할 awk program 코드 지정
+     ```
+     
+     **ARGUMENT**
+     ```
+     입력 파일 지정 또는 variable값 지정
+     ```
+   
+   * **awk 기본구조**
   
-  `awk`명령어를 입력한 다음, 작은따옴표로 둘러싸인 패턴이나 액션을 입력하고 마지막엔 입력 파일 이름을 입력한다. 파일 이름을 지정하지 않으면 키보드 입력에 의한 표준 입력을 받는다.
-  그리고 awk는 입력된 라인들의 데이터들을 공백 또는 탭을 기준으로 분리해 `$1`부터 시작하는 각각의 필드 변수로 분리해 인식한다.
-  ```bash
-  awk 'pattern' filename
-  awk '{action}' filename
-  awk 'pattern {action}' filename
   ```
+  pattern { action }
+  ```
+  
+  **`awk`명령어를 입력한 다음, 작은따옴표로 둘러싸인 패턴이나 액션을 입력하고 마지막엔 입력 파일 이름을 입력한다.** 파일 이름을 지정하지 않으면 키보드 입력에 의한 표준 입력을 받는다.
+    그리고 awk는 입력된 라인들의 데이터들을 공백 또는 탭을 기준으로 분리해 `$1`부터 시작하는 각각의 필드 변수로 분리해 인식한다.  
+   
+    ```bash
+    awk 'pattern' filename
+    awk '{action}' filename
+    awk 'pattern {action}' filename
+    ```  
   
   **예시**
   
+  ```bash
+  $ vi awkfile.txt
+  ```
+  ```
+  name    phone           birth           sex     score
+  reakwon 010-1234-1234   1981-01-01      M       100
+  sim     010-4321-4321   1999-09-09      F       88
+  nara    010-1010-2020   1993-12-12      M       20
+  yut     010-2323-2323   1988-10-10      F       59
+  kim     010-1234-4321   1977-07-17      M       69
+  nam     010-4321-7890   1996-06-20      M       75
+  ```
+  **1.열(cloumn)만 출력하기**
+  ```bash
+  awk '{ print $1 }' ./awkfile.txt
+  ```
+  ```
+  name
+  reakwon
+  sim
+  nara
+  yut
+  kim
+  nam
+  ```
+  여러개의 열 출력
+  ```bash
+  awk '{ print $1,$2 }' ./awkfile.txt
+  ```
+  ```
+  name phone
+  reakwon 010-1234-1234
+  sim 010-4321-4321
+  nara 010-1010-2020
+  yut 010-2323-2323
+  kim 010-1234-4321
+  nam 010-4321-7890
+  ```
+  여기서 awk의 기본적인 action은 print이며 모든 열을 전부 출력한다.
+  
+  **2.특정 pattern이 포함된 레코드 출력**
+  ```bash
+  awk '/rea/' ./awkfile.txt # rea라는 문자열이 포함된 레코드 출력
+  ```
+  ```
+  reakwon 010-1234-1234   1981-01-01      M       100
+  ```
+  
+  **3.출력의 내용 첨가**
+  
+  awk는 print에 문자열을 추가하여 출력물의 내용에 문자열을 추가할 수 있다.
+  ```bash
+  awk '{ print ("name : " $1, ", "  "phone : " $2) }' ./awk_test_file.txt
+  # 'name : '다음 이름, 'phone : '다음 휴대폰 번호 출력
+  ```
+  ```
+  name : name , phone : phone
+  name : reakwon , phone : 010-1234-1234
+  name : sim , phone : 010-4321-4321
+  name : nara , phone : 010-1010-2020
+  name : yut , phone : 010-2323-2323
+  name : kim , phone : 010-1234-4321
+  name : nam , phone : 010-4321-7890
+  ```
+  
+  **4.특정 레코드 검색하기 - if구문**
+  
+  action에서 if구문을 이용하여 특정 레코드를 검색할 수 있다.
+  ```bash
+  awk '{ if ( $5 >= 80 ) print ($0) }' ./awk_test_file.txt # 점수가 80점 이상인 레코드 출력
+  awk '{ if ( $5 >= 80 ) print ($0) }' ./awk_test_file.txt # 점수가 80점 이상인 레코드 출력
+  awk '{ if ( $5 >= 80 ) print ($0) }' ./awk_test_file.txt # 성별이 남자인 사람 레코드
+  awk '{ if ( $4 == "M" && $5 >= 80) print ($0) }' ./awk_test_file.txt # 남자이면서 80점 이상인 레코드 출력
+  ```
+  
+  **5.내장 함수**
+  
+  awk의 여러 내장함수를 사용하여 출력할 수 있다.
+  
+  `length` : 단어 길이
+  
+  `substr` : 단어 부분 추출
+  
+  `tolower` : 소문자로 출력
+  
+  `toupper` : 대문자로 출력
+  
+  `split` : 문자열 쪼개기
+  
+  등 여러 내장함수가 있다.
+  ```bash
+  awk '{ print ("name leng : " length($1), "substr(0,3) : " substr($1,0,3)) }' ./awk_test_file.txt
+  # length함수로 단어 길이 알아내기, substr함수로 단어의 부분단어 추출하기
+  ```
+  
+  **6.반복문**
+  
+  ```bash
+  awk '{
+  for(i=0;i<2;i++)
+   print( "for loop :" i "\t" $1, $2, $3)
+  }' ./awkfile.txt
+  ```
+  
+  **7.BEGIN, END pattern**
+  
+  BEGIN은 awk가 모든 레코드를 돌기 전에 한번 action을 수행하고 END는 모든 레코드를 다 돈 후에 마지막으로 정의한 action이 실행된다.
+  
+  **8.변수 사용**
+  awk는 언어이기 때문에 **변수**를 사용할 수 있다.
   
   
