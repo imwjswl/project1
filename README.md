@@ -2,12 +2,12 @@
 
 쉘스크립트 명령어 getopt / getopts
 
-*getopt
++getopt
 
-*getopts
++getopts
 
 리눅스 명령어 sed / awk
 
-*sed
++sed
 
-*awk
++awk
