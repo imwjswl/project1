@@ -365,7 +365,7 @@ getopt와 getopts를 사용하기 위해서는 먼저 short 옵션과 long 옵�
   
   awk는 print에 문자열을 추가하여 출력물의 내용에 문자열을 추가할 수 있다.
   ```bash
-  awk '{ print ("name : " $1, ", "  "phone : " $2) }' ./awk_test_file.txt
+  awk '{ print ("name : " $1, ", "  "phone : " $2) }' ./awkfile.txt
   # 'name : '다음 이름, 'phone : '다음 휴대폰 번호 출력
   ```
   ```
@@ -382,13 +382,13 @@ getopt와 getopts를 사용하기 위해서는 먼저 short 옵션과 long 옵�
   
   action에서 if구문을 이용하여 특정 레코드를 검색할 수 있다.
   ```bash
-  awk '{ if ( $5 >= 80 ) print ($0) }' ./awk_test_file.txt 
+  awk '{ if ( $5 >= 80 ) print ($0) }' ./awkfile.txt 
   # 점수가 80점 이상인 레코드 출력
-  awk '{ if ( $5 >= 80 ) print ($0) }' ./awk_test_file.txt 
+  awk '{ if ( $5 >= 80 ) print ($0) }' ./awkfile.txt 
   # 점수가 80점 이상인 레코드 출력
-  awk '{ if ( $5 >= 80 ) print ($0) }' ./awk_test_file.txt 
+  awk '{ if ( $5 >= 80 ) print ($0) }' ./awkfile.txt 
   # 성별이 남자인 사람 레코드
-  awk '{ if ( $4 == "M" && $5 >= 80) print ($0) }' ./awk_test_file.txt 
+  awk '{ if ( $4 == "M" && $5 >= 80) print ($0) }' ./awkfile.txt 
   # 남자이면서 80점 이상인 레코드 출력
   ```
   
@@ -408,7 +408,7 @@ getopt와 getopts를 사용하기 위해서는 먼저 short 옵션과 long 옵�
   
   등 여러 내장함수가 있다.
   ```bash
-  awk '{ print ("name leng : " length($1), "substr(0,3) : " substr($1,0,3)) }' ./awk_test_file.txt
+  awk '{ print ("name leng : " length($1), "substr(0,3) : " substr($1,0,3)) }' ./awkfile.txt
   # length함수로 단어 길이 알아내기, substr함수로 단어의 부분단어 추출하기
   ```
   
