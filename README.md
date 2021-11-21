@@ -123,7 +123,8 @@ getopt와 getopts를 사용하기 위해서는 먼저 short 옵션과 long 옵�
     
     **shell이 처음 실행 되면 $OPTIND 값은 1을 가리키고 getopts 명령이 실행될 때마다 다음 옵션의 index값을 가리키게 된다.**
     ```bash
-    # 다음 set 명령은 실제 "command -a -bc hello world"명령을 실행했을 때와 같이 positional parameters를 설정한다.
+    # 다음 set 명령은 실제 "command -a -bc hello world"명령을 실행했을 때와 같이 
+    # positional parameters를 설정한다.
     $ set -- -a -bc hello world
     $ echo "$@"
     -a -bc hello world
@@ -381,10 +382,14 @@ getopt와 getopts를 사용하기 위해서는 먼저 short 옵션과 long 옵�
   
   action에서 if구문을 이용하여 특정 레코드를 검색할 수 있다.
   ```bash
-  awk '{ if ( $5 >= 80 ) print ($0) }' ./awk_test_file.txt # 점수가 80점 이상인 레코드 출력
-  awk '{ if ( $5 >= 80 ) print ($0) }' ./awk_test_file.txt # 점수가 80점 이상인 레코드 출력
-  awk '{ if ( $5 >= 80 ) print ($0) }' ./awk_test_file.txt # 성별이 남자인 사람 레코드
-  awk '{ if ( $4 == "M" && $5 >= 80) print ($0) }' ./awk_test_file.txt # 남자이면서 80점 이상인 레코드 출력
+  awk '{ if ( $5 >= 80 ) print ($0) }' ./awk_test_file.txt 
+  # 점수가 80점 이상인 레코드 출력
+  awk '{ if ( $5 >= 80 ) print ($0) }' ./awk_test_file.txt 
+  # 점수가 80점 이상인 레코드 출력
+  awk '{ if ( $5 >= 80 ) print ($0) }' ./awk_test_file.txt 
+  # 성별이 남자인 사람 레코드
+  awk '{ if ( $4 == "M" && $5 >= 80) print ($0) }' ./awk_test_file.txt 
+  # 남자이면서 80점 이상인 레코드 출력
   ```
   
   **5.내장 함수**
@@ -421,6 +426,7 @@ getopt와 getopts를 사용하기 위해서는 먼저 short 옵션과 long 옵�
   BEGIN은 awk가 모든 레코드를 돌기 전에 한번 action을 수행하고 END는 모든 레코드를 다 돈 후에 마지막으로 정의한 action이 실행된다.
   
   **8.변수 사용**
+  
   awk는 언어이기 때문에 **변수**를 사용할 수 있다.
   
   
